@@ -2,6 +2,7 @@ package com.example.admin.testandroidapp;
 
 
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
+
+    private OpenGLView openGLView;
+    private NativeGLView nativeGLView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,26 +43,11 @@ public class MainActivity extends AppCompatActivity {
         tabHost.addTab(tabSpec);
 
         tabHost.setCurrentTab(0);
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
 
-       //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        openGLView = (OpenGLView) findViewById(R.id.openGLViewJava);
+        openGLView.onPause();
 
-    // Example of a call to a native method
-    TextView tv = (TextView) findViewById(R.id.fibonacciTextJava);
-//    tv.setText(stringFromJNI());
-    Fibonacci fibo = new Fibonacci();
-//        tv.setText(Long.toString(fibo.getFibonacci(10)));
-//        tv.setText(fibonacci(new Long(10)).toString());
 
-//    tv.setText(Long.toString(fibo(100)));
     }
 
     @Override
@@ -94,6 +84,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    public void onOpenGLJava(View view) {
+        Button javaButton = (Button) findViewById(R.id.openGLButtonJava);
+        javaButton.setText(Integer.toString(openGLView.test(1)));
+    }
 
 
     static {
@@ -104,9 +108,6 @@ public class MainActivity extends AppCompatActivity {
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
-    //public native String stringFromJNI();
-//    public native Long fibonacci(long num);
-   // public static native long fibonacci(String num);
     public static native int fibo(int num);
 
     // Used to load the 'native-lib' library on application startup

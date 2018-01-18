@@ -74,6 +74,17 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
+                    <Button
+                        android:id="@+id/openGLButtonJava"
+                        android:layout_width="128dp"
+                        android:layout_height="wrap_content"
+                        android:onClick="onOpenGLJava"
+                        android:text="Java" />
+
+                    <com.example.admin.testandroidapp.OpenGLView
+                        android:id="@+id/openGLViewJava"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
                 </LinearLayout>
 
                 <LinearLayout
