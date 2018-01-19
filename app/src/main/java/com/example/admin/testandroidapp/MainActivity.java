@@ -13,6 +13,7 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity {
 
     private OpenGLView openGLView;
+    private GL2JNIView nativeGLVIew;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
         openGLView = (OpenGLView) findViewById(R.id.openGLViewJava);
         openGLView.onPause();
-
-
     }
 
     @Override
