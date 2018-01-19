@@ -13,8 +13,6 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity {
 
     private OpenGLView openGLView;
-    private NativeGLView nativeGLView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
