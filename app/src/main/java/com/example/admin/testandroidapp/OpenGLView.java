@@ -30,17 +30,11 @@ public class OpenGLView extends GLSurfaceView {
         setRenderer(openGLRenderer);
     }
 
-    public int test(int delay){
-        try {
+    public void clearTimes(){
         openGLRenderer.clearTimes();
-        this.onResume();
+    }
 
-            TimeUnit.SECONDS.sleep(delay);
-        this.onPause();
+    public int getTimes(){
         return openGLRenderer.getTimes();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return -1;
-        }
     }
 }

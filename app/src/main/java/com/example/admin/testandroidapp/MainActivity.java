@@ -1,8 +1,10 @@
 package com.example.admin.testandroidapp;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.support.v7.app.AppCompatActivity;
@@ -10,14 +12,20 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.concurrent.TimeUnit;
+
 public class MainActivity extends AppCompatActivity {
 
     private OpenGLView openGLView;
-    private GL2JNIView nativeGLVIew;
+    private GL2JNIView nativeGLView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        nativeGLView = new GL2JNIView(getApplication());
+//        setContentView(nativeGLView);
+
         setContentView(R.layout.activity_main);
 
         setTitle("TabHost");
@@ -45,6 +53,11 @@ public class MainActivity extends AppCompatActivity {
 
         openGLView = (OpenGLView) findViewById(R.id.openGLViewJava);
         openGLView.onPause();
+
+        nativeGLView = new GL2JNIView(openGLView.getContext());
+        nativeGLView.setLayoutParams(openGLView.getLayoutParams());
+        nativeGLView.onPause();
+        ((LinearLayout) findViewById(R.id.tab2)).addView(nativeGLView);
     }
 
     @Override
@@ -81,19 +94,24 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
     public void onOpenGLJava(View view) {
         Button javaButton = (Button) findViewById(R.id.openGLButtonJava);
-        javaButton.setText(Integer.toString(openGLView.test(1)));
+        openGLView.clearTimes();
+        try {
+            openGLView.clearTimes();
+            openGLView.onResume();
+
+            TimeUnit.SECONDS.sleep(1);
+            openGLView.onPause();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        javaButton.setText(Integer.toString(openGLView.getTimes()));
+//        setContentView(R.layout.content_main);
+    }
+
+    public void onOpenGLCpp(View view) {
+        nativeGLView.onResume();
     }
 
 

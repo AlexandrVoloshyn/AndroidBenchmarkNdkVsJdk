@@ -82,23 +82,17 @@
                         android:onClick="onOpenGLJava"
                         android:text="Java" />
 
+                    <com.example.admin.testandroidapp.OpenGLView
+                        android:id="@+id/openGLViewJava"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp" />
+
                     <Button
                         android:id="@+id/openGLButtonCpp"
                         android:layout_width="128dp"
                         android:layout_height="wrap_content"
-
+                        android:onClick="onOpenGLCpp"
                         android:text="C++" />
-                    <!--<com.example.admin.testandroidapp.GL2JNIView-->
-                        <!--android:id="@+id/openGLViewCpp"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="match_parent"-->
-
-                        <!--/>-->
-
-                    <com.example.admin.testandroidapp.OpenGLView
-                        android:id="@+id/openGLViewJava"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
