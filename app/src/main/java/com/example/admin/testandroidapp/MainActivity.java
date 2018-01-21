@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     private OpenGLView openGLView;
     private GL2JNIView nativeGLView;
+    private int glDelay = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,28 +97,35 @@ public class MainActivity extends AppCompatActivity {
 
     public void onOpenGLJava(View view) {
         Button javaButton = (Button) findViewById(R.id.openGLButtonJava);
-        openGLView.clearTimes();
         try {
             openGLView.clearTimes();
             openGLView.onResume();
 
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.SECONDS.sleep(glDelay);
             openGLView.onPause();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         javaButton.setText(Integer.toString(openGLView.getTimes()));
-//        setContentView(R.layout.content_main);
     }
 
     public void onOpenGLCpp(View view) {
-        nativeGLView.onResume();
+        Button cppButton = (Button) findViewById(R.id.openGLButtonCpp);
+        try {
+            GL2JNILib.clearTimer();
+            nativeGLView.onResume();
+
+            TimeUnit.SECONDS.sleep(glDelay);
+            nativeGLView.onPause();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        cppButton.setText(Integer.toString(GL2JNILib.getTimer()));
     }
 
 
     static {
         System.loadLibrary("native-lib");
-//        System.loadLibrary("Fibonacci.h");
     }
     /**
      * A native method that is implemented by the 'native-lib' native library,

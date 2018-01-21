@@ -1,25 +1,11 @@
 #include <jni.h>
-#include <android/log.h>
 
 #include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
-
-#define  LOG_TAG    "libgl2jni"
-#define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-#define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
-
 static void printGLString(const char *name, GLenum s) {
     const char *v = (const char *) glGetString(s);
-}
-
-static void checkGlError(const char* op) {
-    for (GLint error = glGetError(); error; error
-                                                    = glGetError()) {
-    }
 }
 
 auto gVertexShader =
@@ -72,9 +58,7 @@ GLuint createProgram(const char* pVertexSource, const char* pFragmentSource) {
     GLuint program = glCreateProgram();
     if (program) {
         glAttachShader(program, vertexShader);
-        checkGlError("glAttachShader");
         glAttachShader(program, pixelShader);
-        checkGlError("glAttachShader");
         glLinkProgram(program);
         GLint linkStatus = GL_FALSE;
         glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
@@ -108,36 +92,47 @@ bool setupGraphics(int w, int h) {
         return false;
     }
     gvPositionHandle = glGetAttribLocation(gProgram, "vPosition");
-    checkGlError("glGetAttribLocation");
 
     glViewport(0, 0, w, h);
-    checkGlError("glViewport");
     return true;
 }
 
 const GLfloat gTriangleVertices[] = { 0.0f, 0.5f, -0.5f, -0.5f,
                                       0.5f, -0.5f };
 
-void renderFrame() {
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    checkGlError("glClearColor");
-    glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-    checkGlError("glClear");
+#include <iomanip> // setprecision
+#include <sstream> // stringstream
 
+void renderFrame() {
+    std::stringstream stream;
+    stream  << "precision mediump float;\n"
+            << "void main() {\n"
+            << "  gl_FragColor = vec4("
+            << std::fixed << static_cast <float> (rand()) / static_cast <float> (RAND_MAX) << ","
+            << std::fixed << std::setprecision(2) << static_cast <float> (rand()) / static_cast <float> (RAND_MAX) << ","
+            << std::fixed << std::setprecision(2) << static_cast <float> (rand()) / static_cast <float> (RAND_MAX) << ","
+            <<"1.0);\n"
+            << "}\n";
+    auto glColor = stream.str().c_str();
+
+    gProgram = createProgram(gVertexShader, glColor);
+    gvPositionHandle = glGetAttribLocation(gProgram, "vPosition");
+    glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(gProgram);
-    checkGlError("glUseProgram");
 
     glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, gTriangleVertices);
-    checkGlError("glVertexAttribPointer");
     glEnableVertexAttribArray(gvPositionHandle);
-    checkGlError("glEnableVertexAttribArray");
     glDrawArrays(GL_TRIANGLES, 0, 3);
-    checkGlError("glDrawArrays");
+    glDisableVertexAttribArray(gProgram);
 }
+
+jint timer = 0;
 
 extern "C" {
 JNIEXPORT void JNICALL Java_com_example_admin_testandroidapp_GL2JNILib_init(JNIEnv * env, jobject obj,  jint width, jint height);
 JNIEXPORT void JNICALL Java_com_example_admin_testandroidapp_GL2JNILib_step(JNIEnv * env, jobject obj);
+JNIEXPORT void JNICALL Java_com_example_admin_testandroidapp_GL2JNILib_clearTimer();
+JNIEXPORT jint JNICALL Java_com_example_admin_testandroidapp_GL2JNILib_getTimer();
 };
 
 JNIEXPORT void JNICALL Java_com_example_admin_testandroidapp_GL2JNILib_init(JNIEnv * env, jobject obj,  jint width, jint height)
@@ -148,4 +143,13 @@ JNIEXPORT void JNICALL Java_com_example_admin_testandroidapp_GL2JNILib_init(JNIE
 JNIEXPORT void JNICALL Java_com_example_admin_testandroidapp_GL2JNILib_step(JNIEnv * env, jobject obj)
 {
     renderFrame();
+    ++timer;
+}
+
+JNIEXPORT void JNICALL Java_com_example_admin_testandroidapp_GL2JNILib_clearTimer(){
+    timer = 0;
+}
+
+JNIEXPORT jint JNICALL Java_com_example_admin_testandroidapp_GL2JNILib_getTimer(){
+    return timer;
 }
