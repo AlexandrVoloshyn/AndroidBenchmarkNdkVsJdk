@@ -1,8 +1,9 @@
 package com.example.admin.testandroidapp;
 
 
-import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
@@ -11,7 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import org.apache.commons.net.ftp.FTPClient;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.sql.Timestamp;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
@@ -83,16 +90,30 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private final int fibonacciTimes = 30;
+
     public void onFibonacciButtonJava(View view) {
         TextView tv = (TextView) findViewById(R.id.fibonacciTextJava);
-        tv.setText(Long.toString(new Fibonacci().getFibonacci(10)));
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+        for(int i = fibonacciTimes; i != 0; --i)
+            new Fibonacci().getFibonacci(30);
+        new Fibonacci().getFibonacci(30);
+
+        Timestamp timestamp1 = new Timestamp(System.currentTimeMillis());
+        long i = timestamp1.getTime() - timestamp.getTime();
+        tv.setText(Long.toString(i));
     }
 
     public void onFibonacciButtonNative(View view) {
         TextView tv = (TextView) findViewById(R.id.fibonacciTextNative);
-        int num= 10;
-        tv.setText(Integer.toString(fibo(num)));
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
+        fibo(fibonacciTimes);
+
+        Timestamp timestamp1 = new Timestamp(System.currentTimeMillis());
+        long i = timestamp1.getTime() - timestamp.getTime();
+        tv.setText(Long.toString(i));
     }
 
     public void onOpenGLJava(View view) {
@@ -123,6 +144,12 @@ public class MainActivity extends AppCompatActivity {
         cppButton.setText(Integer.toString(GL2JNILib.getTimer()));
     }
 
+    public void onInternetJava(View view){
+        Button javaButton = (Button) findViewById(R.id.internetJavaButton);
+
+        new OpenFTP(this).execute();
+
+    }
 
     static {
         System.loadLibrary("native-lib");

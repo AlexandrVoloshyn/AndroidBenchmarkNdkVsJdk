@@ -102,6 +102,19 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
+                    <Button
+                        android:id="@+id/internetJavaButton"
+                        android:layout_width="128dp"
+                        android:layout_height="wrap_content"
+                        android:onClick="onInternetJava"
+                        android:text="Java" />
+
+                    <Button
+                        android:id="@+id/internetNativeButton"
+                        android:layout_width="128dp"
+                        android:layout_height="wrap_content"
+                        android:onClick="onOpenGLJava"
+                        android:text="C++" />
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>

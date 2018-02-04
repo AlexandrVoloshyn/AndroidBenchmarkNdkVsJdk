@@ -23,11 +23,12 @@ extern "C" {
 //    }
 
     JNIEXPORT jint Java_com_example_admin_testandroidapp_MainActivity_fibo(JNIEnv * env, jobject obj, jint num){
-        jint result=num;
-        Fibonacci *fibonacci = new Fibonacci();
-        result = fibonacci->getFibonacci(result);
+        int result=30;
 
-        return result;
+        for( int i = num; i != 0; --i) {
+            (new Fibonacci())->getFibonacci(result);
+        }
+        return (new Fibonacci())->getFibonacci(result);
 }
 
 }

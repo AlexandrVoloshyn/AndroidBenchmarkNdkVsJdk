@@ -7,7 +7,7 @@
 
 class Fibonacci {
 public:
-    jint getFibonacci(jint num) {
+    int getFibonacci(int num) {
         if (num == 1)
             return 1;
         if (num == 0)
