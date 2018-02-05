@@ -103,17 +103,17 @@
                     android:orientation="vertical">
 
                     <Button
-                        android:id="@+id/internetJavaButton"
+                        android:id="@+id/fileJavaButton"
                         android:layout_width="128dp"
                         android:layout_height="wrap_content"
-                        android:onClick="onInternetJava"
+                        android:onClick="onWriteFileJava"
                         android:text="Java" />
 
                     <Button
-                        android:id="@+id/internetNativeButton"
+                        android:id="@+id/fileNativeButton"
                         android:layout_width="128dp"
                         android:layout_height="wrap_content"
-                        android:onClick="onOpenGLJava"
+                        android:onClick="onWriteFileCpp"
                         android:text="C++" />
                 </LinearLayout>
             </FrameLayout>

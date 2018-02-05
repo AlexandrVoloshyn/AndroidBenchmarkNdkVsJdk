@@ -1,23 +1,21 @@
 package com.example.admin.testandroidapp;
 
 
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
 
-import org.apache.commons.net.ftp.FTPClient;
-
+import java.io.BufferedOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.InetAddress;
+import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.util.concurrent.TimeUnit;
 
@@ -54,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         tabSpec = tabHost.newTabSpec("tag3");
         tabSpec.setContent(R.id.tab3);
-        tabSpec.setIndicator("Internet");
+        tabSpec.setIndicator("File");
         tabHost.addTab(tabSpec);
 
         tabHost.setCurrentTab(0);
@@ -144,11 +142,25 @@ public class MainActivity extends AppCompatActivity {
         cppButton.setText(Integer.toString(GL2JNILib.getTimer()));
     }
 
-    public void onInternetJava(View view){
-        Button javaButton = (Button) findViewById(R.id.internetJavaButton);
+    public void onWriteFileJava(View view){
+        Button javaButton = (Button) findViewById(R.id.fileJavaButton);
 
-        new OpenFTP(this).execute();
+        try {
+            OutputStream outputStream =  new BufferedOutputStream((new FileOutputStream("/sdcard/newFile.txt")));
+            for(int i = 0; i < 1000; ++i)
+                outputStream.write("Hello world!\n".getBytes());
+            outputStream.flush();
+            outputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void onWriteFileCpp(View view){
+        Button cppButton = (Button) findViewById(R.id.fileNativeButton);
+        write();
     }
 
     static {
@@ -159,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
      * which is packaged with this application.
      */
     public static native int fibo(int num);
+    public static native void write();
 
     // Used to load the 'native-lib' library on application startup
 }
