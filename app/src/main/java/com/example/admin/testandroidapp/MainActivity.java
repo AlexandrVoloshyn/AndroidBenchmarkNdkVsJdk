@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private final int fibonacciTimes = 20;
+    private final int fibonacciTimes = 10;
     private final int numberOfFibonacci = 40;
 
     public void onFibonacciButtonJava(View view) {
