@@ -88,15 +88,16 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private final int fibonacciTimes = 30;
+    private final int fibonacciTimes = 20;
+    private final int numberOfFibonacci = 40;
 
     public void onFibonacciButtonJava(View view) {
         TextView tv = (TextView) findViewById(R.id.fibonacciTextJava);
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
         for(int i = fibonacciTimes; i != 0; --i)
-            new Fibonacci().getFibonacci(30);
-        new Fibonacci().getFibonacci(30);
+            new Fibonacci().getFibonacci(numberOfFibonacci);
+        int fibo = new Fibonacci().getFibonacci(numberOfFibonacci);
 
         Timestamp timestamp1 = new Timestamp(System.currentTimeMillis());
         long i = timestamp1.getTime() - timestamp.getTime();
@@ -107,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         TextView tv = (TextView) findViewById(R.id.fibonacciTextNative);
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-        fibo(fibonacciTimes);
+        int fibo = fibo(fibonacciTimes);
 
         Timestamp timestamp1 = new Timestamp(System.currentTimeMillis());
         long i = timestamp1.getTime() - timestamp.getTime();
@@ -145,9 +146,10 @@ public class MainActivity extends AppCompatActivity {
     public void onWriteFileJava(View view){
         Button javaButton = (Button) findViewById(R.id.fileJavaButton);
 
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         try {
             OutputStream outputStream =  new BufferedOutputStream((new FileOutputStream("/sdcard/newFile.txt")));
-            for(int i = 0; i < 1000; ++i)
+            for(int i = 0; i < 1000000; ++i)
                 outputStream.write("Hello world!\n".getBytes());
             outputStream.flush();
             outputStream.close();
@@ -156,11 +158,20 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Timestamp timestamp1 = new Timestamp(System.currentTimeMillis());
+        long i = timestamp1.getTime() - timestamp.getTime();
+        javaButton.setText(Long.toString(i));
     }
 
     public void onWriteFileCpp(View view){
         Button cppButton = (Button) findViewById(R.id.fileNativeButton);
+
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         write();
+
+        Timestamp timestamp1 = new Timestamp(System.currentTimeMillis());
+        long i = timestamp1.getTime() - timestamp.getTime();
+        cppButton.setText(Long.toString(i));
     }
 
     static {

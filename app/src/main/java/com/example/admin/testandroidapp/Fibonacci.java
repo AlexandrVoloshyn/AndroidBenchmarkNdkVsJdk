@@ -8,7 +8,7 @@ import android.os.Debug;
 import java.util.logging.Logger;
 
 public class Fibonacci {
-    public long getFibonacci(long n) {
+    public int getFibonacci(int n) {
         if (n == 1)
             return 1;
         if (n == 0)
