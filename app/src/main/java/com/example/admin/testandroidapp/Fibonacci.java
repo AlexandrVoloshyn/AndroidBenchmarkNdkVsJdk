@@ -3,10 +3,6 @@
  */
 package com.example.admin.testandroidapp;
 
-import android.os.Debug;
-
-import java.util.logging.Logger;
-
 public class Fibonacci {
     public int getFibonacci(int n) {
         if (n == 1)

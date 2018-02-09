@@ -126,7 +126,7 @@ void renderFrame() {
     glDisableVertexAttribArray(gProgram);
 }
 
-jint timer = 0;
+int timer = 0;
 
 extern "C" {
 JNIEXPORT void JNICALL Java_com_example_admin_testandroidapp_GL2JNILib_init(JNIEnv * env, jobject obj,  jint width, jint height);
