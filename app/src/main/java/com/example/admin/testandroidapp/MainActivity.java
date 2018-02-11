@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Timestamp;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private OpenGLView openGLView;
     private GL2JNIView nativeGLView;
     private int glDelay = 1;
+//    private MongoService mongoService = new MongoService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,26 +95,38 @@ public class MainActivity extends AppCompatActivity {
 
     public void onFibonacciButtonJava(View view) {
         TextView tv = (TextView) findViewById(R.id.fibonacciTextJava);
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
         for(int i = fibonacciTimes; i != 0; --i)
             new Fibonacci().getFibonacci(numberOfFibonacci);
         int fibo = new Fibonacci().getFibonacci(numberOfFibonacci);
 
-        Timestamp timestamp1 = new Timestamp(System.currentTimeMillis());
+        final Timestamp timestamp1 = new Timestamp(System.currentTimeMillis());
         long i = timestamp1.getTime() - timestamp.getTime();
         tv.setText(Long.toString(i));
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                new MongoService().sendInfo("Mathematic", "SDK", timestamp1.getTime() - timestamp.getTime());
+            }
+        });
     }
 
     public void onFibonacciButtonNative(View view) {
         TextView tv = (TextView) findViewById(R.id.fibonacciTextNative);
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
         int fibo = fibo(fibonacciTimes);
 
-        Timestamp timestamp1 = new Timestamp(System.currentTimeMillis());
+        final Timestamp timestamp1 = new Timestamp(System.currentTimeMillis());
         long i = timestamp1.getTime() - timestamp.getTime();
         tv.setText(Long.toString(i));
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                new MongoService().sendInfo("Mathematic", "NDK", timestamp1.getTime() - timestamp.getTime());
+            }
+        });
     }
 
     public void onOpenGLJava(View view) {
@@ -127,6 +141,12 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         javaButton.setText(Integer.toString(openGLView.getTimes()));
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                new MongoService().sendInfo("OpenGL ES 2", "SDK", openGLView.getTimes());
+            }
+        });
     }
 
     public void onOpenGLCpp(View view) {
@@ -141,12 +161,18 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         cppButton.setText(Integer.toString(GL2JNILib.getTimer()));
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                new MongoService().sendInfo("OpenGL ES 2", "NDK", openGLView.getTimes());
+            }
+        });
     }
 
     public void onWriteFileJava(View view){
         Button javaButton = (Button) findViewById(R.id.fileJavaButton);
 
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         try {
             OutputStream outputStream =  new BufferedOutputStream((new FileOutputStream("/sdcard/newFile.txt")));
             for(int i = 0; i < 1000000; ++i)
@@ -158,20 +184,32 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Timestamp timestamp1 = new Timestamp(System.currentTimeMillis());
+        final Timestamp timestamp1 = new Timestamp(System.currentTimeMillis());
         long i = timestamp1.getTime() - timestamp.getTime();
         javaButton.setText(Long.toString(i));
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                new MongoService().sendInfo("File Write", "SDK", timestamp1.getTime() - timestamp.getTime());
+            }
+        });
     }
 
     public void onWriteFileCpp(View view){
         Button cppButton = (Button) findViewById(R.id.fileNativeButton);
 
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         write();
 
-        Timestamp timestamp1 = new Timestamp(System.currentTimeMillis());
+        final Timestamp timestamp1 = new Timestamp(System.currentTimeMillis());
         long i = timestamp1.getTime() - timestamp.getTime();
         cppButton.setText(Long.toString(i));
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                new MongoService().sendInfo("File Write", "NDK", timestamp1.getTime() - timestamp.getTime());
+            }
+        });
     }
 
     static {
