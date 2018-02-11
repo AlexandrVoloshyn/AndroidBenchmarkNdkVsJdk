@@ -1,9 +1,5 @@
 package com.example.admin.testandroidapp;
 
-/**
- * Created by Admin on 19.01.2018.
- */
-
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
@@ -23,9 +19,7 @@ class GL2JNIView extends GLSurfaceView {
     }
 
     private void init() {
-
         setEGLContextFactory(new ContextFactory());
-
         setRenderer(new Renderer());
     }
 
